@@ -1,0 +1,206 @@
+openapi: 3.0.0
+info:
+  title: API de Previsão do Clima
+  description: API para obter previsões climáticas e gráficos relacionados.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+paths:
+  /previsao/{dia_mes}:
+    get:
+      summary: Obter previsão por dia e mês
+      parameters:
+        - name: dia_mes
+          in: path
+          required: true
+          description: O dia e mês no formato DD_MM (ex: 31_12)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Previsão encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrevisaoResponse'
+        '404':
+          description: Previsão não encontrada
+  /listar-dias-eventos:
+    get:
+      summary: Listar dias com eventos climáticos
+      responses:
+        '200':
+          description: Lista de datas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '500':
+          description: Erro ao buscar dados
+  /grafico-tendencia-temperatura/{ano}:
+    get:
+      summary: Obter gráfico de tendência anual de temperatura
+      parameters:
+        - name: ano
+          in: path
+          required: true
+          description: Ano para o gráfico (ex: 2020)
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Gráfico encontrado
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Gráfico não encontrado
+  /grafico-tendencia-precipitacao-anual/{ano}:
+    get:
+      summary: Obter gráfico de tendência anual de precipitação
+      parameters:
+        - name: ano
+          in: path
+          required: true
+          description: Ano para o gráfico (ex: 2020)
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Gráfico encontrado
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Gráfico não encontrado
+  /grafico-tendencia-precipitacao-geral:
+    get:
+      summary: Obter gráfico de tendência anual de precipitação geral
+      responses:
+        '200':
+          description: Gráfico encontrado
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Gráfico não encontrado
+  /grafico-medias-temperaturas/{ano}:
+    get:
+      summary: Obter gráfico de médias de temperaturas
+      parameters:
+        - name: ano
+          in: path
+          required: true
+          description: Ano para o gráfico (ex: 2020)
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Gráfico encontrado
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Gráfico não encontrado
+  /grafico-rosa-ventos:
+    get:
+      summary: Obter gráfico de rosa dos ventos
+      responses:
+        '200':
+          description: Gráfico encontrado
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Gráfico não encontrado
+  /grafico-precipitacao-mensal/{ano}:
+    get:
+      summary: Obter gráfico de precipitação mensal
+      parameters:
+        - name: ano
+          in: path
+          required: true
+          description: Ano para o gráfico (ex: 2020)
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Gráfico encontrado
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Gráfico não encontrado
+components:
+  schemas:
+    PrevisaoResponse:
+      type: object
+      properties:
+        data:
+          type: string
+          description: Data da previsão
+        probabilidade_evento_atipico:
+          type: number
+          format: float
+          description: Probabilidade de evento atípico
+        is_temperatura_abaixo_media:
+          type: boolean
+          description: Indicador se a temperatura está abaixo da média
+        temperatura_abaixo_media_obtida:
+          type: number
+          format: float
+          description: Temperatura abaixo da média obtida
+        temperatura_minima_media:
+          type: number
+          format: float
+          description: Temperatura mínima média
+        is_temperatura_acima_media:
+          type: boolean
+          description: Indicador se a temperatura está acima da média
+        temperatura_acima_media_obtida:
+          type: number
+          format: float
+          description: Temperatura acima da média obtida
+        temperatura_maxima_media:
+          type: number
+          format: float
+          description: Temperatura máxima média
+        is_precipitacao_acima_media:
+          type: boolean
+          description: Indicador se a precipitação está acima da média
+        precipitacao_acima_media_obtida:
+          type: number
+          format: float
+          description: Precipitação acima da média obtida
+        precipitacao_media:
+          type: number
+          format: float
+          description: Precipitação média
+        is_vento_acima_media:
+          type: boolean
+          description: Indicador se o vento está acima da média
+        vento_acima_media_obtido:
+          type: number
+          format: float
+          description: Vento acima da média obtido
+        vento_media:
+          type: number
+          format: float
+          description: Vento médio
+        media_utilizada:
+          type: string
+          description: Média utilizada para os cálculos
